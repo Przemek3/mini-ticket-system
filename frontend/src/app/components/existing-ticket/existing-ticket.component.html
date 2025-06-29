@@ -1,0 +1,12 @@
+<div class="left-side-panel">
+  <h3>{{ ticket.title }}</h3>
+  <p>{{ ticket.description }}</p>
+  <p>Actual status: {{ ticket.status }}</p>
+  <p-select
+    [options]="options"
+    [(ngModel)]="newStatus"
+    class="w-full md:w-56"
+    placeholder="Select status"
+  />
+  <p-button (onClick)="save()">Save</p-button>
+</div>

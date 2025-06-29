@@ -1,0 +1,10 @@
+<div>
+  <div
+    *ngFor="let ticket of ticketService.tickets()"
+    class="ticket-item"
+    (click)="selectTicket(ticket)"
+  >
+    <h3>{{ ticket.title }}</h3>
+    <p>Status: {{ ticket.status.toString() }}</p>
+  </div>
+</div>

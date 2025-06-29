@@ -1,0 +1,10 @@
+<div class="left-side-panel">
+  <form (ngSubmit)="submit()" class="ticket-form" [formGroup]="form">
+    <input formControlName="title" placeholder="Title" />
+    <textarea
+      formControlName="description"
+      placeholder="Description"
+    ></textarea>
+    <p-button (onClick)="submit()">Create Ticket</p-button>
+  </form>
+</div>

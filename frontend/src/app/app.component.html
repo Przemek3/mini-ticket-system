@@ -1,0 +1,24 @@
+<main class="layout-container">
+  <p-splitter
+    [panelSizes]="[75, 25]"
+    [style]="{ height: '98vh' }"
+    styleClass="mb-8"
+  >
+    <ng-template #panel>
+      <router-outlet />
+    </ng-template>
+    <ng-template #panel>
+      <div class="w-90">
+        <p-button
+          label="Create Ticket"
+          icon="pi pi-plus"
+          class="mb-4"
+          [routerLink]="['/new']"
+        />
+        <app-ticket-list />
+      </div>
+    </ng-template>
+  </p-splitter>
+</main>
+
+<!--  -->
