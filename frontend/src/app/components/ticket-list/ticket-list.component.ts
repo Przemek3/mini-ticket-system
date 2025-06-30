@@ -2,13 +2,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Ticket } from '../../models/ticket.model';
 import { TicketService } from '../../services/ticket.service';
-import { Status } from '../../models/status.enum';
 import { CommonModule } from '@angular/common';
 import { SelectModule } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
-import { tick } from '@angular/core/testing';
 
 @Component({
   standalone: true,
@@ -29,8 +27,6 @@ export class TicketListComponent implements OnInit {
   get tickets() {
     return this.ticketService.tickets();
   }
-
-  loadTickets() {}
 
   selectTicket(ticket: Ticket) {
     this.selectedTicket = ticket;
