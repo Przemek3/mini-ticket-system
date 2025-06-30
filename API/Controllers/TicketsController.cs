@@ -1,53 +1,42 @@
 ﻿using Api.Models;
+using Api.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Sockets;
 
-namespace api.Controllers
+namespace Api.Controllers
 {
-
-
     [ApiController]
     [Route("tickets")]
     public class TicketsController : ControllerBase
     {
-        private static readonly List<TicketDto> Tickets = new();
-        private static int _nextId = 1;
+        private readonly TicketService _service;
+
+        public TicketsController(TicketService service)
+        {
+            _service = service;
+        }
 
         [HttpGet]
-        public ActionResult<IEnumerable<TicketDto>> GetAll()
-        {
-            return Ok(Tickets);
-        }
+        public ActionResult<IEnumerable<TicketDto>> GetAll() => Ok(_service.GetAll());
 
         [HttpGet("{id}")]
         public ActionResult<TicketDto> GetById(int id)
         {
-            var ticket = Tickets.FirstOrDefault(t => t.Id == id);
-            if (ticket == null)
-                return NotFound();
-
-            return Ok(ticket);
+            var ticket = _service.GetById(id);
+            return ticket == null ? NotFound() : Ok(ticket);
         }
 
-        //  Rezygnuję z asynchroniczności, bo i tak nie łączy się to obecnie z bazą danych.
-        //  Zdecydowałbym się na asynchroniczność w sytuacji w której wiedziałbym, że aplikacja będzie w ten sposób rozwijana.
         [HttpPost]
         public ActionResult<TicketDto> Create([FromBody] TicketDto ticket)
         {
-            ticket.Id = _nextId++;
-            Tickets.Add(ticket);
-            return CreatedAtAction(nameof(GetAll), new { id = ticket.Id }, ticket);
+            var created = _service.Create(ticket);
+            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateStatus(int id, [FromBody] TicketDto updatedTicket)
+        public IActionResult UpdateStatus(int id, [FromBody] TicketDto updated)
         {
-            var ticket = Tickets.FirstOrDefault(t => t.Id == id);
-            if (ticket == null)
-                return NotFound();
-
-            ticket.Status = updatedTicket.Status;
-            return NoContent();
+            var success = _service.UpdateStatus(id, updated.Status);
+            return success ? NoContent() : NotFound();
         }
     }
 }
