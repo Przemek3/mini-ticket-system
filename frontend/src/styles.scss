@@ -4,4 +4,7 @@
 .left-side-panel {
   width: 90%;
   padding: 1rem;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
 }

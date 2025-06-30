@@ -14,6 +14,11 @@ export class TicketService {
 
   constructor(private http: HttpClient) {}
 
+  updateTickets(ticket: Ticket) {
+    const updated = [...this.tickets(), ticket];
+    this.tickets.set(updated);
+  }
+
   updateLocalTicketStatus(ticketId: number, newStatus: Ticket['status']) {
     const updated = this.tickets().map((ticket) =>
       ticket.id === ticketId ? { ...ticket, status: newStatus } : ticket

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
 import { TicketService } from '../../services/ticket.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
+import { Router } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -14,7 +15,11 @@ import { ButtonModule } from 'primeng/button';
 export class TicketFormComponent {
   form: FormGroup;
 
-  constructor(private fb: FormBuilder, private ticketService: TicketService) {
+  constructor(
+    private fb: FormBuilder,
+    private ticketService: TicketService,
+    private router: Router
+  ) {
     this.form = this.fb.group({
       title: [''],
       description: [''],
@@ -24,9 +29,16 @@ export class TicketFormComponent {
 
   submit() {
     if (this.form.valid) {
-      this.ticketService.createTicket(this.form.value).subscribe(() => {
-        this.form.reset({ status: 'Open' });
-      });
+      this.ticketService.createTicket(this.form.value).subscribe(
+        (ticket) => {
+          this.form.reset({ status: 'Open' });
+          this.ticketService.updateTickets(ticket);
+          this.router.navigate(['/tickets', ticket.id]);
+        },
+        (error) => {
+          console.error('Error creating ticket:', error);
+        }
+      );
     }
   }
 }
